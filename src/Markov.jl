@@ -3,6 +3,7 @@ using LinearAlgebra
 
 export proxima_iteracao, simular_cadeia, encontrar_vetor_estacionario
 
+# realiza a proxima iteracao consecutivamente
 function proxima_iteracao(P::Matrix{Float64}, v::Vector{Float64})
     n = size(P, 1)
     resultado = zeros(Float64, n)
@@ -26,7 +27,7 @@ function proxima_iteracao(P::Matrix{Float64}, v::Vector{Float64})
     return resultado
 end
 
-#simula a cadeia de markov realizando as iteracoes no array de vetores
+#simula a cadeia de markov fazendo o push de cada iteracao no array de vetores
 function simular_cadeia(P::Matrix{Float64}, v0::Vector{Float64}, passos::Int)
     vs = [(v0)]
     v = v0
