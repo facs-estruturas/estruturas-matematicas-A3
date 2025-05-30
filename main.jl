@@ -16,7 +16,7 @@ v0 = [0.5, # 50% centro
       0.2  # 20% parque
 ] 
 
-passos = 20
+passos = 200
 
 resultados = simular_cadeia(P, v0, passos)
 

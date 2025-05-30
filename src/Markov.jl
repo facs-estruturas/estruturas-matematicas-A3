@@ -15,6 +15,7 @@ function proxima_iteracao(P::Matrix{Float64}, v::Vector{Float64})
         termos = []
         for j in 1:n
             termo = linha[j] * v[j]
+            # arredondamento feito apenas para a impressao, nao altera o calculo
             push!(termos, "P[$i,$j]*v[$j] = $(round(linha[j], digits=3))*$(round(v[j], digits=3)) = $(round(termo, digits=6))")
             soma += termo
         end
@@ -27,7 +28,7 @@ function proxima_iteracao(P::Matrix{Float64}, v::Vector{Float64})
     return resultado
 end
 
-#simula a cadeia de markov fazendo o push de cada iteracao no array de vetores
+# simula a cadeia de markov fazendo o push de cada iteracao no array de vetores
 function simular_cadeia(P::Matrix{Float64}, v0::Vector{Float64}, passos::Int)
     vs = [(v0)]
     v = v0
