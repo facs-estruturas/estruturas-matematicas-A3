@@ -35,7 +35,7 @@ v0 = [0.5,
 ```  
 <br><br>
 ## Como instalar as dependências
-Para rodar o projeto, siga os passos abaixo:
+Para instalar as dependências do projeto, siga os passos abaixo:
 
 1. **Inicie o Julia**
 
@@ -45,7 +45,7 @@ Para rodar o projeto, siga os passos abaixo:
 
 2. **Ative o ambiente do projeto e instale as dependências**
 
-   No terminal do Julia (REPL), digite `]` para entrar no modo de pacote, depois:
+   No terminal do Julia (REPL), digite `]` para entrar no modo de pacote (pkg), depois:
 
    ```bash
    activate .
@@ -53,3 +53,20 @@ Para rodar o projeto, siga os passos abaixo:
    ```
 
 Isso instala automaticamente todos os pacotes utilizados na aplicação.
+
+## Como rodar o projeto
+Para rodar o projeto:
+
+Caso ainda esteja no modo de pacote (pkg) do terminal do Julia, aperte Backspace ou Ctrl+C para retornar ao terminal do Julia.
+
+No terminal do Julia:
+
+```
+include("main.jl")
+```
+
+Ou, alternativamente, fora do terminal do Julia:
+
+```bash
+julia main.jl
+```
