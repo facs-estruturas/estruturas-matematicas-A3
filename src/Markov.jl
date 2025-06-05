@@ -4,7 +4,6 @@ using LinearAlgebra
 export proxima_iteracao, simular_cadeia, encontrar_vetor_estacionario, recebe_matriz, recebe_v0, recebe_passos
 
 function recebe_matriz()
-
     # falta validar input > 0 e menor que 1; validar soma da linha === 1
     #provavelmente fazer uma função para fazer essas validações e tratar
 
@@ -29,7 +28,6 @@ function recebe_matriz()
 end
 
 function recebe_v0(n::Int)
-
     while true
         println("Digite os $n vetores iniciais separados por espaço: ")
         entrada = readline()
@@ -56,18 +54,24 @@ function recebe_v0(n::Int)
 end
 
 function recebe_passos()
+    while true
+        println("Digite o número de passos desejados: ")
+        passos = parse(Int, readline())
 
-    # acho que não falta nada, revisarei
-
-    println("Digite o número de passos desejados: ")
-    passos = parse(Int, readline())
-    if passos < 1
-        error("Erro: o número mínimo de passos é 2.")
+        try
+            if passos < 2
+            println("O número mínimo de passos deve ser 2.")
+            continue
+            else
+                return passos 
+            end
+        catch
+            println("Erro ao receber os passos. Tente novamente.")
+        end
     end
-    return passos
 end
 
-# realiza a proxima iteracao consecutivamente
+# refatorar essa funcao para um codigo mais limpo
 function proxima_iteracao(P::Matrix{Float64}, v::Vector{Float64})
     n = size(P, 1)
     resultado = zeros(Float64, n)
@@ -86,9 +90,7 @@ function proxima_iteracao(P::Matrix{Float64}, v::Vector{Float64})
         resultado[i] = soma
         println("→ v[$i] = ", join(termos, " + "), " = ", round(soma, digits=6))
     end
-
     println("\n")
-
     return resultado
 end
 
