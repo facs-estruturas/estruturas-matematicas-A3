@@ -4,25 +4,25 @@ using Plots
 
 P, n = recebe_matriz()
 v0 = recebe_v0(n)
-# passos = recebe_passos()
-println(P)
-println(n)
+passos = recebe_passos()
+# println(P)
+# println(n)
 
-# println("Exemplo:")
-# resultados = simular_cadeia(P, v0, passos)
+println("Exemplo:")
+resultados = simular_cadeia(P, v0, passos)
 
-# for (i, v) in enumerate(resultados)
-#     println("Passo $i: ", round.(v, digits = 4), "  | Soma: ", sum(v))
-# end
+for (i, v) in enumerate(resultados)
+    println("Passo $i: ", round.(v, digits = 4), "  | Soma: ", sum(v))
+end
 
-# ve = encontrar_vetor_estacionario(P)
-# println("\nVetor estacionário aproximado: ", round.(ve, digits=4))
+ve = encontrar_vetor_estacionario(P)
+println("\nVetor estacionário aproximado: ", round.(ve, digits=4))
 
-# plot([v[1] for v in resultados], label="Centro", linewidth=2)
-# plot!([v[2] for v in resultados], label="Orla", linewidth=2)
-# plot!(
-#     [v[3] for v in resultados], label="Parque", linewidth=2,
-#     xlabel="Passos", ylabel="Probabilidade",
-#     title="Evolução da Cadeia de Markov"
-# )
-# savefig("plots/evolucao.png")
+plot([v[1] for v in resultados], label="Centro", linewidth=2)
+plot!([v[2] for v in resultados], label="Orla", linewidth=2)
+plot!(
+    [v[3] for v in resultados], label="Parque", linewidth=2,
+    xlabel="Passos", ylabel="Probabilidade",
+    title="Evolução da Cadeia de Markov"
+)
+savefig("plots/evolucao.png")

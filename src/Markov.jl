@@ -1,7 +1,7 @@
 module Markov
 using LinearAlgebra
 
-export proxima_iteracao, simular_cadeia, encontrar_vetor_estacionario, recebe_matriz, recebe_v0
+export proxima_iteracao, simular_cadeia, encontrar_vetor_estacionario, recebe_matriz, recebe_v0, recebe_passos
 
 function recebe_matriz()
 
@@ -60,7 +60,7 @@ function recebe_passos()
     # acho que não falta nada, revisarei
 
     println("Digite o número de passos desejados: ")
-    passos = readline()
+    passos = parse(Int, readline())
     if passos < 1
         error("Erro: o número mínimo de passos é 2.")
     end
