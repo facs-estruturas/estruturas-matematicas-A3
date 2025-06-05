@@ -1,7 +1,53 @@
 module Markov
 using LinearAlgebra
 
-export proxima_iteracao, simular_cadeia, encontrar_vetor_estacionario
+export proxima_iteracao, simular_cadeia, encontrar_vetor_estacionario, criar_matriz
+
+function criar_matriz()
+
+    # falta validar input > 0 e menor que 1; validar soma da linha === 1
+    #provavelmente fazer uma função para fazer essas validações e tratar
+
+    println("Digite o tamanho da matriz (n x n): ")
+    n = parse(Int, readline())
+
+    println("Digite a matriz de transição linha por linha, separando os valores por espaço: ")
+    P = zeros(n, n)
+
+    for i in 1:n
+        print("Linha $i: ")
+        entrada = readline()
+        valores = parse.(Float64, split(entrada))
+        if length(valores) != n
+            error("A linha $i precisa ter exatamente $n valores.")
+        end
+        P[i, :] = valores
+    end
+    println("\nMatriz de transição recebida: ")
+    println(P)
+    return P
+end
+
+function receber_v0()
+
+    # falta validações e possivel refinamento
+
+    println("Digite os vetores iniciais: ")
+    v0 = readline()
+    return v0
+end
+
+function receber_passos()
+
+    # acho que não falta nada, revisarei
+
+    println("Digite o número de passos desejados: ")
+    passos = readline()
+    if passos < 1
+        error("O número mínimo de passos é 2.")
+    end
+    return passos
+end
 
 # realiza a proxima iteracao consecutivamente
 function proxima_iteracao(P::Matrix{Float64}, v::Vector{Float64})
