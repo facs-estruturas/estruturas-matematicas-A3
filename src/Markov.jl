@@ -1,9 +1,9 @@
 module Markov
 using LinearAlgebra
 
-export proxima_iteracao, simular_cadeia, encontrar_vetor_estacionario, criar_matriz
+export proxima_iteracao, simular_cadeia, encontrar_vetor_estacionario, recebe_matriz, recebe_v0
 
-function criar_matriz()
+function recebe_matriz()
 
     # falta validar input > 0 e menor que 1; validar soma da linha === 1
     #provavelmente fazer uma função para fazer essas validações e tratar
@@ -19,32 +19,50 @@ function criar_matriz()
         entrada = readline()
         valores = parse.(Float64, split(entrada))
         if length(valores) != n
-            error("A linha $i precisa ter exatamente $n valores.")
+            error("Erro: a linha $i precisa ter exatamente $n valores.")
         end
         P[i, :] = valores
     end
     println("\nMatriz de transição recebida: ")
     println(P)
-    return P
+    return P, n
 end
 
-function receber_v0()
+function recebe_v0(n::Int)
 
-    # falta validações e possivel refinamento
+    while true
+        println("Digite os $n vetores iniciais separados por espaço: ")
+        entrada = readline()
 
-    println("Digite os vetores iniciais: ")
-    v0 = readline()
-    return v0
+        try
+            valores = parse.(Float64, split(entrada))
+
+            if length(valores) != n
+                error("Erro: são necessários exatamente $n vetores iniciais.")
+                continue
+            elseif any(x -> x < 0, valores)
+                println("Erro: Os valores não podem ser negativos.")
+                continue
+            elseif abs(sum(valores) - 1.0 > 4e-6)
+                println("Erro: a soma dos valores deve ser 1.")
+                continue
+            else
+                return valores
+            end
+        catch
+            println("Erro ao converter os valores. Tente novamente.")
+        end
+    end
 end
 
-function receber_passos()
+function recebe_passos()
 
     # acho que não falta nada, revisarei
 
     println("Digite o número de passos desejados: ")
     passos = readline()
     if passos < 1
-        error("O número mínimo de passos é 2.")
+        error("Erro: o número mínimo de passos é 2.")
     end
     return passos
 end
