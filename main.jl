@@ -5,8 +5,6 @@ using Plots
 P, n = recebe_matriz()
 v0 = recebe_v0(n)
 passos = recebe_passos()
-# println(P)
-# println(n)
 
 println("Exemplo:")
 resultados = simular_cadeia(P, v0, passos)

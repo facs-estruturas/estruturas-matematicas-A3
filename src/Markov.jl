@@ -4,24 +4,54 @@ using LinearAlgebra
 export proxima_iteracao, simular_cadeia, encontrar_vetor_estacionario, recebe_matriz, recebe_v0, recebe_passos
 
 function recebe_matriz()
-    # falta validar input > 0 e menor que 1; validar soma da linha === 1
-    #provavelmente fazer uma função para fazer essas validações e tratar
+    n = 0
 
-    println("Digite o tamanho da matriz (n x n): ")
-    n = parse(Int, readline())
+    while true
+        println("Digite o tamanho da matriz (n x n): ")
+
+        try
+            n = parse(Int, readline())
+            if n < 2
+                println("O tamanho mínimo de uma matriz é 2. Tente novamente.")
+            else
+                break
+            end
+        catch
+            println("Opção inválida, Digite um número inteiro.")
+        end
+    end
 
     println("Digite a matriz de transição linha por linha, separando os valores por espaço: ")
     P = zeros(n, n)
+    tolerancia = 2 # verificar se mantem ou muda
 
     for i in 1:n
-        print("Linha $i: ")
-        entrada = readline()
-        valores = parse.(Float64, split(entrada))
-        if length(valores) != n
-            error("Erro: a linha $i precisa ter exatamente $n valores.")
+        while true
+            print("Linha $i: ")
+            entrada = readline()
+
+            try
+                valores = parse.(Float64, split(entrada))
+
+                if length(valores) != n
+                    error("Erro: a linha $i precisa ter exatamente $n valores.")
+                    continue
+                elseif any(x -> x < 0, valores)
+                    println("Todos os valores devem ser maiores ou iguais a 0.")
+                    continue
+                elseif abs(sum(valores) - 1.0) > tolerancia
+                    println("A soma da linha $i deve ser 1 (tolerância de 0.000004). Soma atual: ", sum(valores))
+                    continue
+                else
+                    P[i, :] = valores
+                    break
+                end
+            catch
+                println("Entrada inválida. Certifique-se de digitar $n números separados por espaço.")
+            end
         end
-        P[i, :] = valores
     end
+
     println("\nMatriz de transição recebida: ")
     println(P)
     return P, n
@@ -83,7 +113,6 @@ function proxima_iteracao(P::Matrix{Float64}, v::Vector{Float64})
         termos = []
         for j in 1:n
             termo = linha[j] * v[j]
-            # arredondamento feito apenas para a impressao, nao altera o calculo
             push!(termos, "P[$i,$j]*v[$j] = $(round(linha[j], digits=3))*$(round(v[j], digits=3)) = $(round(termo, digits=6))")
             soma += termo
         end
@@ -94,7 +123,6 @@ function proxima_iteracao(P::Matrix{Float64}, v::Vector{Float64})
     return resultado
 end
 
-# simula a cadeia de markov fazendo o push de cada iteracao no array de vetores
 function simular_cadeia(P::Matrix{Float64}, v0::Vector{Float64}, passos::Int)
     vs = [(v0)]
     v = v0
@@ -105,7 +133,6 @@ function simular_cadeia(P::Matrix{Float64}, v0::Vector{Float64}, passos::Int)
     return vs
 end
 
-# tenta encontrar o vetor estacionario
 function encontrar_vetor_estacionario(P::Matrix{Float64})
     n = size(P, 1)
     A = transpose(P) - I
