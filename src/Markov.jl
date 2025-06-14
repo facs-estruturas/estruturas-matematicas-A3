@@ -21,9 +21,28 @@ function recebe_matriz()
         end
     end
 
+    tipo = 0
+    while true
+        println("Sua matriz é uma matriz coluna ou uma matriz linha?")
+        println("1: coluna")
+        println("2: linha")
+        println("Digite 1 ou 2 :")
+
+        try
+            tipo = parse(Int, readline())
+            if tipo in [1, 2]
+                break
+            else
+                println("Opção inválida. Digite apenas '1' ou '2'")
+            end
+        catch
+            println("Opção inválida. Digite apenas 1 ou 2.")
+        end
+    end
+
     println("Digite a matriz de transição linha por linha, separando os valores por espaço: ")
     P = zeros(n, n)
-    tolerancia = 2 # verificar se mantem ou muda
+    tolerancia = 2 # ajustar a tolerancia para linha e coluna
 
     for i in 1:n
         while true
@@ -50,6 +69,14 @@ function recebe_matriz()
                 println("Entrada inválida. Certifique-se de digitar $n números separados por espaço.")
             end
         end
+    end
+    
+    # Transpõe caso seja matriz linha
+    if tipo == 2
+        println("\nVocê selecionou matriz linha. Será transposta para uso como matriz coluna.")
+        P = Matrix(transpose(P))
+    else
+        println("\nVocê selecionou matriz coluna. Será usada diretamente.")
     end
 
     println("\nMatriz de transição recebida: ")
@@ -101,12 +128,12 @@ function recebe_passos()
     end
 end
 
-# refatorar essa funcao para um codigo mais limpo
 function proxima_iteracao(P::Matrix{Float64}, v::Vector{Float64})
     n = size(P, 1)
     resultado = zeros(Float64, n)
 
-    println("\n📊 Cálculo do novo vetor (P * v):")
+    # calculo para matriz coluna, matriz linha é transposta antes de ser calculada
+    println("\nCálculo do novo vetor (P * v):")
     for i in 1:n
         linha = P[i, :]
         soma = 0.0
