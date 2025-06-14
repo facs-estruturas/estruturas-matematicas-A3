@@ -8,7 +8,6 @@ function recebe_matriz()
 
     while true
         println("Digite o tamanho da matriz (n x n): ")
-
         try
             n = parse(Int, readline())
             if n < 2
@@ -17,71 +16,89 @@ function recebe_matriz()
                 break
             end
         catch
-            println("Opção inválida, Digite um número inteiro.")
+            println("Opção inválida. Digite um número inteiro.")
         end
     end
 
     tipo = 0
     while true
         println("Sua matriz é uma matriz coluna ou uma matriz linha?")
-        println("1: coluna")
-        println("2: linha")
-        println("Digite 1 ou 2 :")
+        println("1: Coluna")
+        println("2: Linha")
+        print("Digite 1 ou 2: ")
 
         try
             tipo = parse(Int, readline())
             if tipo in [1, 2]
                 break
             else
-                println("Opção inválida. Digite apenas '1' ou '2'")
+                println("Opção inválida. Digite apenas 1 ou 2.")
             end
         catch
             println("Opção inválida. Digite apenas 1 ou 2.")
         end
     end
 
-    println("Digite a matriz de transição linha por linha, separando os valores por espaço: ")
-    P = zeros(n, n)
-    tolerancia = 2 # ajustar a tolerancia para linha e coluna
+    tolerancia = 0.000004
 
-    for i in 1:n
-        while true
-            print("Linha $i: ")
-            entrada = readline()
+    while true
+        P = zeros(n, n)
+        println("\nDigite a matriz de transição linha por linha, separando os valores por espaço:")
 
-            try
-                valores = parse.(Float64, split(entrada))
+        for i in 1:n
+            while true
+                print("Linha $i: ")
+                entrada = readline()
+                try
+                    valores = parse.(Float64, split(entrada))
 
-                if length(valores) != n
-                    error("Erro: a linha $i precisa ter exatamente $n valores.")
-                    continue
-                elseif any(x -> x < 0, valores)
-                    println("Todos os valores devem ser maiores ou iguais a 0.")
-                    continue
-                elseif abs(sum(valores) - 1.0) > tolerancia
-                    println("A soma da linha $i deve ser 1 (tolerância de 0.000004). Soma atual: ", sum(valores))
-                    continue
-                else
-                    P[i, :] = valores
-                    break
+                    if length(valores) != n
+                        println("Erro: a linha $i precisa ter exatamente $n valores.")
+                        continue
+                    elseif any(x -> x < 0, valores)
+                        println("Todos os valores devem ser maiores ou iguais a 0.")
+                        continue
+                    elseif tipo == 2 && abs(sum(valores) - 1.0) > tolerancia # validação por linha
+                        println("A soma da linha $i deve ser 1 (tolerância de $tolerancia). Soma atual: ", sum(valores))
+                        continue
+                    else
+                        P[i, :] = valores
+                        break
+                    end
+                catch
+                    println("Entrada inválida. Certifique-se de digitar $n números separados por espaço.")
                 end
-            catch
-                println("Entrada inválida. Certifique-se de digitar $n números separados por espaço.")
             end
         end
-    end
-    
-    # Transpõe caso seja matriz linha
-    if tipo == 2
-        println("\nVocê selecionou matriz linha. Será transposta para uso como matriz coluna.")
-        P = Matrix(transpose(P))
-    else
-        println("\nVocê selecionou matriz coluna. Será usada diretamente.")
-    end
 
-    println("\nMatriz de transição recebida: ")
-    println(P)
-    return P, n
+        if tipo == 1  # validação por coluna
+            erro_encontrado = false
+            for j in 1:n
+                soma_coluna = sum(P[:, j])
+                if abs(soma_coluna - 1.0) > tolerancia
+                    println("A coluna $j deve somar 1 (tolerância $tolerancia). Soma atual: $soma_coluna")
+                    erro_encontrado = true
+                end
+            end
+            if erro_encontrado
+                println("Erro nas colunas. Reinsira toda a matriz.\n")
+                continue  # reinicia o loop externo
+            end
+        end
+
+        # Transpõe se for matriz por linha
+        if tipo == 2
+            println("\nVocê selecionou matriz linha. Será transposta para uso como matriz coluna.")
+            P = Matrix(transpose(P))
+        else
+            println("\nVocê selecionou matriz coluna. Será usada diretamente.")
+        end
+
+        println("\nMatriz de transição recebida: ")
+        println(P)
+
+        return P, n
+    end
 end
 
 function recebe_v0(n::Int)
