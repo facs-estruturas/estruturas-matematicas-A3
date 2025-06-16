@@ -1,7 +1,11 @@
 module Markov
 using LinearAlgebra
+using Printf
 
 export proxima_iteracao, simular_cadeia, encontrar_vetor_estacionario, recebe_matriz, recebe_v0, recebe_passos
+
+const TOLERANCIA = 0.000004
+const TOLERANCIA_STR = @sprintf("%.6f", TOLERANCIA)
 
 function recebe_matriz()
     n = 0
@@ -22,7 +26,7 @@ function recebe_matriz()
 
     tipo = 0
     while true
-        println("Sua matriz é uma matriz coluna ou uma matriz linha?")
+        println("O seu vetor de probabilidades é uma matriz linha ou uma matriz coluna?")
         println("1: Coluna")
         println("2: Linha")
         print("Digite 1 ou 2: ")
@@ -39,11 +43,9 @@ function recebe_matriz()
         end
     end
 
-    tolerancia = 0.000004
-
     while true
         P = zeros(n, n)
-        println("\nDigite a matriz de transição linha por linha, separando os valores por espaço:")
+        println("\nDigite a matriz de transição linha por linha, separando os valores por espaço e utilizando ponto para os decimais (ex: 0.707):")
 
         for i in 1:n
             while true
@@ -58,15 +60,15 @@ function recebe_matriz()
                     elseif any(x -> x < 0, valores)
                         println("Todos os valores devem ser maiores ou iguais a 0.")
                         continue
-                    elseif tipo == 2 && abs(sum(valores) - 1.0) > tolerancia # validação por linha
-                        println("A soma da linha $i deve ser 1 (tolerância de $tolerancia). Soma atual: ", sum(valores))
+                    elseif tipo == 2 && abs(sum(valores) - 1.0) > TOLERANCIA # validação por linha
+                        println("A soma da linha $i deve ser 1 (tolerância de $TOLERANCIA_STR). Soma atual: ", sum(valores))
                         continue
                     else
                         P[i, :] = valores
                         break
                     end
                 catch
-                    println("Entrada inválida. Certifique-se de digitar $n números separados por espaço.")
+                    println("Entrada inválida. Certifique-se de digitar $n números separados por espaço e de utilizar ponto para os decimais.")
                 end
             end
         end
@@ -75,8 +77,8 @@ function recebe_matriz()
             erro_encontrado = false
             for j in 1:n
                 soma_coluna = sum(P[:, j])
-                if abs(soma_coluna - 1.0) > tolerancia
-                    println("A coluna $j deve somar 1 (tolerância $tolerancia). Soma atual: $soma_coluna")
+                if abs(soma_coluna - 1.0) > TOLERANCIA
+                    println("A coluna $j deve somar 1 (tolerância $TOLERANCIA_STR). Soma atual: $soma_coluna")
                     erro_encontrado = true
                 end
             end
@@ -103,19 +105,19 @@ end
 
 function recebe_v0(n::Int)
     while true
-        println("Digite os $n vetores iniciais separados por espaço: ")
+        println("Digite os $n valores do vetor inicial, separando os valores por espaço e utilizando ponto para os decimais: ")
         entrada = readline()
 
         try
             valores = parse.(Float64, split(entrada))
 
             if length(valores) != n
-                error("Erro: são necessários exatamente $n vetores iniciais.")
+                error("Erro: são necessários exatamente $n valores para o vetor inicial.")
                 continue
             elseif any(x -> x < 0, valores)
                 println("Erro: Os valores não podem ser negativos.")
                 continue
-            elseif abs(sum(valores) - 1.0 > 4e-6)
+            elseif abs(sum(valores) - 1.0) > TOLERANCIA
                 println("Erro: a soma dos valores deve ser 1.")
                 continue
             else
