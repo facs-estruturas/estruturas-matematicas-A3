@@ -1,8 +1,9 @@
 module Markov
 using LinearAlgebra
 using Printf
+using Plots
 
-export proxima_iteracao, simular_cadeia, encontrar_vetor_estacionario, recebe_matriz, recebe_v0, recebe_passos
+export proxima_iteracao, simular_cadeia, encontrar_vetor_estacionario, recebe_matriz, recebe_v0, recebe_passos, plotar_grafico
 
 const TOLERANCIA = 0.000004
 const TOLERANCIA_STR = @sprintf("%.6f", TOLERANCIA)
@@ -187,6 +188,24 @@ function encontrar_vetor_estacionario(P::Matrix{Float64})
     b[end] = 1.0
     π = A \ b
     return π
+end
+
+function plotar_grafico(resultados::Vector{Vector{Float64}})
+    n_estados = length(resultados[1])
+    passos = 0:(length(resultados) - 1)
+
+    # Plot da primeira linha
+    plot(passos, [v[1] for v in resultados], label="Estado 1", linewidth=2)
+
+    # Plot das linhas seguintes
+    for i in 2:n_estados
+        plot!(passos, [v[i] for v in resultados], label="Estado $i", linewidth=2)
+    end
+
+    xlabel!("Passos")
+    ylabel!("Probabilidade")
+    title!("Evolução da Cadeia de Markov")
+    savefig("plots/evolucao.png")
 end
 
 end

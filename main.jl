@@ -1,6 +1,5 @@
 include("src/Markov.jl")
 using .Markov
-using Plots
 
 P, n = recebe_matriz()
 v0 = recebe_v0(n)
@@ -16,13 +15,4 @@ end
 ve = encontrar_vetor_estacionario(P)
 println("\nVetor estacionário aproximado: ", round.(ve, digits=4))
 
-# as labels do plot devem ser dinamicas de acordo com as entradas
-
-# plot([v[1] for v in resultados], label="Centro", linewidth=2)
-# plot!([v[2] for v in resultados], label="Orla", linewidth=2)
-# plot!(
-#     [v[3] for v in resultados], label="Parque", linewidth=2,
-#     xlabel="Passos", ylabel="Probabilidade",
-#     title="Evolução da Cadeia de Markov"
-# )
-# savefig("plots/evolucao.png")
+plotar_grafico(resultados)
