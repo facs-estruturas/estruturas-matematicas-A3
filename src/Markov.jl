@@ -100,7 +100,7 @@ function recebe_matriz()
         println("\nMatriz de transição recebida: ")
         println(P)
 
-        return P, n
+        return P, n, tipo
     end
 end
 
@@ -180,8 +180,9 @@ function simular_cadeia(P::Matrix{Float64}, v0::Vector{Float64}, passos::Int)
     return vs
 end
 
-function encontrar_vetor_estacionario(P::Matrix{Float64})
+function encontrar_vetor_estacionario(P::Matrix{Float64}, tipo::Int)
     n = size(P, 1)
+    A = (tipo == 1 ? transpose(P) : P) - I
     A = vcat(A[1:end-1, :], ones(1, n))
     b = zeros(n)
     b[end] = 1.0
