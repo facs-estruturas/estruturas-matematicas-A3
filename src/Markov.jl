@@ -182,10 +182,11 @@ end
 
 function encontrar_vetor_estacionario(P::Matrix{Float64})
     n = size(P, 1)
+    A = P - I
     A = vcat(A[1:end-1, :], ones(1, n))
     b = zeros(n)
     b[end] = 1.0
-    π = A \ b
+    π = abs.(A \ b)
     return π
 end
 
