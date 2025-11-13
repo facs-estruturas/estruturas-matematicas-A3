@@ -58,6 +58,7 @@ Com o Julia devidamente instalado, siga os passos abaixo:
    ```bash
    activate .
    instantiate
+   import Pkg; Pkg.add("Plots")
    ```
 
 Isso instala automaticamente todos os pacotes utilizados na aplicação.
