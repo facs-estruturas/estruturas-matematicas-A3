@@ -35,8 +35,14 @@ v0 = [0.4 0.2 0.1 0.2 0.1 0 0 0]
 ```  
 <br><br>
 ## Como instalar as dependências
-Para instalar as dependências do projeto, é necessário que o usuário possua a aplicação do Julia instalado em seu computador. Não sendo o caso, basta seguir os passos disponíveis no website oficial da linguagem, em https://julialang.org/install/.
-
+Para instalar as dependências do projeto, é necessário que o usuário possua a aplicação do Julia instalado em seu computador.
+Se estiver usando o Windows, execute o seguinte comando:
+``
+winget install --name Julia --id 9NJNWW8PVKMN -e -s msstore
+`` 
+<br>
+<br>
+Não sendo o caso, basta seguir os passos disponíveis no website oficial da linguagem, em https://julialang.org/install/.
 Com o Julia devidamente instalado, siga os passos abaixo:
 
 1. **Inicie o Julia**
